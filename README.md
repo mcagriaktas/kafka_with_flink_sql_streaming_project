@@ -2,7 +2,7 @@
 
 A complete streaming analytics pipeline using Apache Kafka, Apache Flink SQL, Hive, HDFS, Prometheus, Grafana, and Jenkins for automated Apache Kafka and Apache Flink jobs. Includes observability, monitoring, and dashboarding features for data streaming.
 
-- [All details are in the Medium article — click the link and check all the explanations.](htttps://a.com)
+- [All details are in the Medium article — click the link and check all the explanations.](https://medium.com/@mucagriaktas/ed2f483d05e0)
 
 ## ⚙️ Services & Versions
 
