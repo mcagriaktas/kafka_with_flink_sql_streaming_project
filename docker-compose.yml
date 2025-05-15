@@ -1,0 +1,263 @@
+services:
+  jobmanager:
+    container_name: jobmanager
+    hostname: jobmanager
+    build: 
+      context: ./images/flink
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+      - "6123:6123"
+      - "9249:9249"
+    volumes:
+      - ./config/flink/jobmanager/config.yaml:/opt/flink/conf/config.yaml
+      - ./logs/flink/flink-state/flink-checkpoints:/opt/flink/flink-state/flink-checkpoints
+      - ./logs/flink/flink-state/flink-savepoints:/opt/flink/flink-state/flink-savepoints
+      - ./logs/flink/jobmanager:/opt/flink/log
+      - ./jobs/flink:/opt/flink/jobs
+      - ./config/hdfs/core-site.xml:/opt/flink/conf/core-site.xml
+      - ./config/hdfs/hdfs-site.xml:/opt/flink/conf/hdfs-site.xml
+      - ./config/hive/hive-site.xml:/opt/flink/conf/hive-site.xml
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.70
+
+  taskmanager:
+    container_name: taskmanager
+    hostname: taskmanager
+    build: 
+      context: ./images/flink
+      dockerfile: Dockerfile
+    ports:
+      - "9250:9249"
+    volumes:
+      - ./config/flink/taskmanager/config.yaml:/opt/flink/conf/config.yaml
+      - ./logs/flink/taskmanager:/opt/flink/log
+      - ./config/hdfs/core-site.xml:/opt/flink/conf/core-site.xml
+      - ./config/hdfs/hdfs-site.xml:/opt/flink/conf/hdfs-site.xml
+      - ./config/hive/hive-site.xml:/opt/flink/conf/hive-site.xml
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.71
+
+  kafka1:
+    container_name: kafka1
+    hostname: kafka1
+    build:
+      context: ./images/kafka/.
+      dockerfile: Dockerfile
+    ports:
+      - '19092:19092'
+      - '7071:7071'
+      - '9308:9308'
+    volumes:
+      - ./config/kafka/kafka1/server.properties:/kafka/config/server.properties
+      - ./config/kafka/kafka1/kafka-metrics.yml:/opt/jmx_exporter/kafka-metrics.yml
+      - ./logs/kafka/kafka1/:/data/kafka/
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.11
+
+  kafka2:
+    container_name: kafka2
+    hostname: kafka2
+    build:
+      context: ./images/kafka/.
+      dockerfile: Dockerfile
+    ports:
+      - '29092:29092'
+      - '7072:7071'
+      - '9309:9308'
+    volumes:
+      - ./config/kafka/kafka2/server.properties:/kafka/config/server.properties
+      - ./config/kafka/kafka2/kafka-metrics.yml:/opt/jmx_exporter/kafka-metrics.yml
+      - ./logs/kafka/kafka2/:/data/kafka/
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.12
+
+  kafka3:
+    container_name: kafka3
+    hostname: kafka3
+    build:
+      context: ./images/kafka/.
+      dockerfile: Dockerfile
+    ports:
+      - '39092:39092'
+      - '7073:7071'
+      - '9310:9308'
+    volumes:
+      - ./config/kafka/kafka3/server.properties:/kafka/config/server.properties
+      - ./config/kafka/kafka3/kafka-metrics.yml:/opt/jmx_exporter/kafka-metrics.yml      
+      - ./logs/kafka/kafka3/:/data/kafka/
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.13
+
+  kafka-ui:
+    build:
+      context: ./images/provectus/.
+      dockerfile: Dockerfile
+    container_name: kafka-ui
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config/provectus/config.yml:/mnt/config.yml
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.16
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+
+  jenkins:
+    container_name: jenkins
+    build:
+      context: ./images/jenkins
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8080"
+      - "50000:50000"
+    volumes:
+      - ./logs/jenkins/jobs/jenkins:/opt/jenkins/jobs
+      - ./logs/jenkins/logs:/opt/jenkins/logs
+      - ./logs/jenkins/plugins:/opt/jenkins/plugins
+      - ./config/jenkins:/opt/jenkins/groovys
+    depends_on:
+      - jobmanager
+      - taskmanager
+      - kafka1
+      - kafka2
+      - kafka3
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.40
+
+  prometheus:
+    container_name: prometheus
+    build:
+      context: ./images/prometheus/.
+      dockerfile: Dockerfile
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
+      - ./logs/prometheus:/prometheus/data
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.17
+    depends_on:
+      - jobmanager
+      - taskmanager
+      - kafka1
+      - kafka2
+      - kafka3
+
+  namenode:
+    container_name: namenode
+    hostname: namenode
+    build:
+      context: ./images/hdfs
+      dockerfile: Dockerfile
+    ports:
+      - "9870:9870"
+      - "9000:9000"
+    volumes:
+      - ./logs/namenode:/opt/hadoop/dfs/name
+      - ./config/hdfs/core-site.xml:/opt/hadoop-3.4.1/etc/hadoop/core-site.xml
+      - ./config/hdfs/hdfs-site.xml:/opt/hadoop-3.4.1/etc/hadoop/hdfs-site.xml
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.33
+
+  datanode:
+    container_name: datanode
+    hostname: datanode
+    build:
+      context: ./images/hdfs
+      dockerfile: Dockerfile
+    ports:
+      - "9864:9864"
+    volumes:
+      - ./logs/datanode:/opt/hadoop/dfs/data
+      - ./config/hdfs/core-site.xml:/opt/hadoop-3.4.1/etc/hadoop/core-site.xml
+      - ./config/hdfs/hdfs-site.xml:/opt/hadoop-3.4.1/etc/hadoop/hdfs-site.xml
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.32
+    depends_on:
+      - namenode
+
+  hms:
+    container_name: hms
+    hostname: hms
+    build:
+      context: ./images/hms
+      dockerfile: Dockerfile
+    ports:
+      - 9083:9083 
+    volumes:
+      - ./config/hms/metastore-site.xml:/opt/apache-hive-metastore-3.1.3-bin/conf/metastore-site.xml
+      - ./config/hdfs/core-site.xml:/opt/hadoop-3.4.1/etc/hadoop/core-site.xml
+      - ./config/hdfs/hdfs-site.xml:/opt/hadoop-3.4.1/etc/hadoop/hdfs-site.xml
+      - ./logs/hms:/opt/apache-hive-metastore-3.1.3-bin/logs
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.30
+        aliases:
+          - hms.dahbest
+          - hms
+    depends_on:
+      - namenode
+      - datanode
+
+  hive:
+    container_name: hive
+    hostname: hive
+    build:
+      context: ./images/hive
+      dockerfile: Dockerfile
+    ports:
+      - "10000:10000"
+      - "10002:10002"
+    volumes:
+      - ./config/hive/hive-site.xml:/opt/apache-hive-3.1.3-bin/conf/hive-site.xml
+      - ./config/hdfs/core-site.xml:/opt/hadoop-3.4.1/etc/hadoop/core-site.xml
+      - ./config/hdfs/hdfs-site.xml:/opt/hadoop-3.4.1/etc/hadoop/hdfs-site.xml
+      - ./logs/hive:/opt/apache-hive-3.1.3-bin/logs
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.31
+    depends_on:
+      - namenode
+      - datanode
+      - hms
+
+  grafana:
+    container_name: grafana
+    build:
+      context: ./images/grafana
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./logs/grafana/logs:/var/lib/grafana
+      - ./logs/grafana/provisioning:/etc/grafana/provisioning
+      - ./config/grafana/datasource:/etc/grafana/provisioning/dashboards/json
+      - ./config/grafana/provisioning/dashboard-provider.yaml:/etc/grafana/provisioning/dashboards/dashboard-provider.yaml
+      - ./config/grafana/provisioning/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=3541
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+    networks:
+      dahbest:
+        ipv4_address: 172.80.0.18
+    depends_on:
+      - prometheus
+
+networks:
+  dahbest:
+    external: true
