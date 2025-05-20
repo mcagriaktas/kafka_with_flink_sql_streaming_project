@@ -12,8 +12,8 @@ This project implements a complete streaming data pipeline with the following co
 |---------|---------|-------------|--------| -------------|
 | Apache Kafka | 4.0.0 | Distributed event streaming platform (3-node cluster) | Inside: 9092, Outside: 19092,29092,39093 | - |
 | Kafka Exporter | 1.9.0 | Kafka Consumer Metrics Exporter | 9308 | - |
-| Apache Flink | 1.20.0 | Stateful stream processing framework with SQL support (Jobmanager, Taskmanager and SQL-Gateway) | 8081 | - |
-| Apache Iceberg | 1.8.1 | Table format for huge analytic datasets | UI: 8081, SQL-Gateway: 8082 | - |
+| Apache Flink | 1.20.0 | Stateful stream processing framework with SQL support (Jobmanager, Taskmanager and SQL-Gateway) | UI: 8081, SQL-Gateway: 8082 | - |
+| Apache Iceberg | 1.8.1 | Table format for huge analytic datasets | - | - |
 | Hadoop (HDFS) | 3.4.1 | Distributed file system for data storage | Namenode: 9870, HDFS: 9000 | User: root |
 | Apache Hive | 3.1.3 | Data warehouse and metadata management | 10000 | User: root |
 | Hive Metastore | 3.0.0 | Metadata service | 9083 | User: root |
