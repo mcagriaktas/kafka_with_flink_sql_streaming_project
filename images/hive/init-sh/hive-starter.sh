@@ -3,7 +3,7 @@
 export HADOOP_HOME=/opt/hadoop-3.4.1
 export HIVE_HOME=/opt/apache-hive-3.1.3-bin
 export PATH=$PATH:$HADOOP_HOME/bin:$HIVE_HOME/bin
-export JAVA_HOME=/usr/local/openjdk-8
+export JAVA_HOME=/usr/local/openjdk-17
 
 echo "Waiting for HDFS..."
 while ! nc -z namenode 9000; do
