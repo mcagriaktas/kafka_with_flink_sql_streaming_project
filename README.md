@@ -20,7 +20,7 @@ This project implements a complete streaming data pipeline with the following co
 | Jenkins | 2.506 | CI/CD and job management (2 jobs) | 8085 | User: cagri, Password: 35413541 |
 | Prometheus | 2.45.0 | Monitoring system | 9090 | - |
 | Provectus | 0.7.2 | Web interface for Kafka management | 8080 | - |
-| Grafana | 10.4.14 | Monitoring and visualization (3 dashboard) | 3000 | User: admin, Password: 3541 |
+| Grafana | 10.4.14 | Monitoring and visualization (3 dashboard) | 3000 | User: cagri, Password: 3541 |
 
 ## 📂 Project Structure
 ```bash

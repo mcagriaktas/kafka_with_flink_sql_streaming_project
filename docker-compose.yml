@@ -242,16 +242,11 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./logs/grafana/logs:/var/lib/grafana
-      - ./logs/grafana/provisioning:/etc/grafana/provisioning
-      - ./config/grafana/datasource:/etc/grafana/provisioning/dashboards/json
-      - ./config/grafana/provisioning/dashboard-provider.yaml:/etc/grafana/provisioning/dashboards/dashboard-provider.yaml
-      - ./config/grafana/provisioning/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=3541
-      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
-      - GF_AUTH_ANONYMOUS_ENABLED=false
-      - GF_SERVER_ROOT_URL=http://localhost:3000
+      - ./config/grafana/grafana.ini:/opt/grafana/confs/grafana.ini
+      - ./config/grafana/provisioning/datasources/:/opt/grafana/provisioning/datasources/
+      - ./config/grafana/provisioning/dashboards/:/opt/grafana/provisioning/dashboards/
+      - ./logs/grafana/logs:/opt/grafana/logs
+      - ./logs/grafana/data:/opt/grafana/data
     networks:
       dahbest:
         ipv4_address: 172.80.0.18
