@@ -1,9 +1,9 @@
-FROM openjdk:21-slim-bullseye
+FROM eclipse-temurin:21-jdk-jammy
 
 ENV JENKINS_HOME=/opt/jenkins
 ENV JENKINS_VERSION=2.506
 ENV KAFKA_VERSION=4.0.0
-ENV FLINK_VERSION=2.0.0
+ENV FLINK_VERSION=1.20.3
 ENV SCALA_VERSION=2.12
 
 RUN apt-get update && \

@@ -1,0 +1,44 @@
+# ======================================================
+# Kafka Clusters Configuration
+# ======================================================
+kafka:
+  clusters:
+    - name: cagri_cluster
+      bootstrapServers: kafka1:9092,kafka2:9092,kafka3:9092
+      readOnly: false
+
+# ======================================================
+# Server Configuration
+# ======================================================
+server:
+  port: 8080
+
+# ======================================================
+# WebClient Settings
+# ======================================================
+webclient:
+  response-timeout-ms: 200000
+  max-in-memory-buffer-size: 100MB
+
+# ======================================================
+# Spring Boot Actuator (optional but useful)
+# ======================================================
+management:
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "info,health"
+
+# ======================================================
+# Application Logging
+# ======================================================
+logging:
+  level:
+    root: INFO
+    io.kafbat.ui: INFO
+    reactor.netty.http.server.AccessLog: INFO

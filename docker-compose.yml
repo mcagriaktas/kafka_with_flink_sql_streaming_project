@@ -95,14 +95,15 @@ services:
         ipv4_address: 172.80.0.13
 
   kafka-ui:
-    build:
-      context: ./images/provectus/.
-      dockerfile: Dockerfile
     container_name: kafka-ui
+    hostname: kafka-ui
+    build:
+      context: ./images/kafkabat/.
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     volumes:
-      - ./config/provectus/config.yml:/mnt/config.yml
+      - ./config/kafkabat/config.yml:/opt/config.yml
     networks:
       dahbest:
         ipv4_address: 172.80.0.16

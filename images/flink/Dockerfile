@@ -1,7 +1,7 @@
-FROM openjdk:17-slim-bullseye
+FROM openjdk:17.0.2-slim-bullseye
 
 # Set Flink version (https://downloads.apache.org/flink/)
-ENV FLINK_VERSION=1.20.0
+ENV FLINK_VERSION=1.20.3
 ENV SCALA_VERSION=2.12
 ENV HIVE_VERSION=3.1.3
 ENV HADOOP_VERSION=3.4.1

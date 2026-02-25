@@ -161,7 +161,7 @@ def main():
             else:
                 print(f"Sent: {message_str}")
                 
-            time.sleep(0)
+            time.sleep(0.5)
             
     except KeyboardInterrupt:
         print("Stopping producer...")
